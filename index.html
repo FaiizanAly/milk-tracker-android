@@ -1448,6 +1448,18 @@ $('masterBtn').onclick=async()=>{
    Backup / Restore
 ══════════════════════════════════════════════ */
 async function saveFile(fn,data){
+  if(window.AndroidDownloader&&window.AndroidDownloader.saveBase64File){
+    try{
+      const reader=new FileReader();
+      reader.onload=function(){
+        const b64=(reader.result||'').split(',')[1]||'';
+        const mime=data.type||(fn.endsWith('.xlsx')?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'application/json');
+        window.AndroidDownloader.saveBase64File(fn,mime,b64);
+      };
+      reader.readAsDataURL(data);
+      return;
+    }catch(e){console.warn('AndroidDownloader err',e);}
+  }
   if(typeof claude!=='undefined'&&claude&&claude.use){
     const d=await claude.use('downloads');if(!d)throw 0;await d.save({filename:fn,data});return;
   }
