@@ -1,16 +1,15 @@
-# Node & Capacitor dependencies
+# Node dependencies
 node_modules/
+package-lock.json
 
-# Android & Gradle build outputs
-android/.gradle/
-android/build/
+# Build outputs & caches
 android/app/build/
-android/captures/
-android/local.properties
+android/build/
+android/.gradle/
+.gradle/
 *.apk
-*.aab
 
-# Web build / OS files
-www/
+# Environment & local settings
+android/local.properties
 .DS_Store
 Thumbs.db
