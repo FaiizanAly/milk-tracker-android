@@ -1,0 +1,16 @@
+# Node & Capacitor dependencies
+node_modules/
+
+# Android & Gradle build outputs
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/local.properties
+*.apk
+*.aab
+
+# Web build / OS files
+www/
+.DS_Store
+Thumbs.db

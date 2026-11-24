@@ -1,0 +1,13 @@
+{
+  "name": "milk-tracker",
+  "version": "1.0.0",
+  "description": "Milk Tracker standalone app",
+  "scripts": {
+    "build": "echo Web build ready"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2"
+  }
+}
