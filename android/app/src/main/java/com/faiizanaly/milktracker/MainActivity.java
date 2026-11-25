@@ -32,6 +32,12 @@ public class MainActivity extends BridgeActivity {
             settings.setDomStorageEnabled(true);
             settings.setAllowFileAccess(true);
             settings.setDatabaseEnabled(true);
+            settings.setTextZoom(100);
+            settings.setUseWideViewPort(true);
+            settings.setLoadWithOverviewMode(true);
+            settings.setSupportZoom(false);
+            settings.setBuiltInZoomControls(false);
+            settings.setDisplayZoomControls(false);
 
             // Add JavaScript Interface for direct Blob/Base64 saving
             webView.addJavascriptInterface(new DownloadBridge(), "AndroidDownloader");
