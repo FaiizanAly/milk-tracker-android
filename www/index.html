@@ -234,6 +234,15 @@ select:focus { border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-lt); outl
 
 /* ═══ Compact Times Seg (small pill) ═══ */
 #tSeg { margin-top:0; }
+#tSeg button { min-width:34px; text-align:center; box-sizing:border-box; }
+#tCustom {
+  width:52px; min-width:52px; max-width:52px;
+  height:30px; padding:2px 6px;
+  font-size:13px; font-weight:700; text-align:center;
+  border-radius:10px; border:1.5px solid var(--pri);
+  background:var(--card); color:var(--ink);
+  box-sizing:border-box;
+}
 
 /* ═══ Quick Qty Grid ═══ */
 .qty-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; width:100%; max-width:100%; }
@@ -349,11 +358,11 @@ select:focus { border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-lt); outl
 .set-row .chev { color:var(--mut); font-size:13px; }
 
 /* ═══ Rate section ═══ */
-.rate-row { display:flex; gap:8px; width:100%; max-width:100%; flex-wrap:wrap; }
-.rate-row input { flex:1 1 120px; min-width:0; }
+.rate-row { display:flex; align-items:center; gap:10px; width:100%; max-width:100%; box-sizing:border-box; }
+.rate-row input { flex:1 1 auto; min-width:0; width:auto; }
 .rate-chg {
   padding:11px 16px; border-radius:var(--r); font-size:14px; font-weight:700;
-  background:var(--pri-lt); color:var(--pri); flex-shrink:0;
+  background:var(--pri-lt); color:var(--pri); flex-shrink:0; white-space:nowrap;
   transition:background .12s;
 }
 .rate-chg:active { background:var(--pri); color:#fff; }
@@ -610,12 +619,16 @@ select:focus { border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-lt); outl
     <div class="date-preview" id="dn"></div>
     <div class="cur-entry"  id="cl"></div>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;margin-bottom:6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:14px;margin-bottom:6px;">
       <span class="field-lbl" id="lTimes" style="margin:0;"></span>
-      <div class="seg" id="tSeg">
-        <div class="seg-thumb" id="tThumb"></div>
-        <button data-t="1" id="tBtn1">1</button>
-        <button data-t="2" id="tBtn2">2</button>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <div class="seg" id="tSeg">
+          <div class="seg-thumb" id="tThumb"></div>
+          <button data-t="1" id="tBtn1">1</button>
+          <button data-t="2" id="tBtn2">2</button>
+          <button data-t="custom" id="tBtnPlus">+</button>
+        </div>
+        <input type="number" id="tCustom" inputmode="numeric" min="1" max="10" step="1" hidden aria-label="Custom deliveries">
       </div>
     </div>
 
@@ -659,6 +672,7 @@ select:focus { border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-lt); outl
     <div id="payInfo" class="pay-info" style="display:none;"></div>
     <span class="field-lbl" id="payAmtLbl" for="payAmt"></span>
     <input type="number" id="payAmt" inputmode="decimal" min="0" step="1" style="margin-bottom:10px;">
+    <div id="payAmtNote" style="font-size:12px;color:var(--mut);margin-top:-4px;margin-bottom:10px;"></div>
     <button class="pay-btn" id="payBtn" hidden></button>
     <button class="undo-btn" id="undoBtn" hidden></button>
   </div>
@@ -696,14 +710,16 @@ select:focus { border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-lt); outl
     <div class="sheet-handle"></div>
     <div class="sheet-title" id="set-title"></div>
     <!-- Rate inside settings -->
-    <div class="card" style="margin:0 16px 10px;">
-      <div class="card-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
-        <span class="field-lbl" id="set-rate-lbl" style="margin:0;"></span>
-        <div class="rate-row" style="width:100%;">
-          <input type="number" id="rate2" inputmode="decimal" min="0" step="0.5">
-          <button class="rate-chg" id="rb2"></button>
+    <div style="padding:0 16px 10px;width:100%;box-sizing:border-box;">
+      <div class="card" style="width:100%;max-width:100%;box-sizing:border-box;margin:0;">
+        <div class="card-row" style="flex-direction:column;align-items:stretch;gap:6px;width:100%;box-sizing:border-box;">
+          <span class="field-lbl" id="set-rate-lbl" style="margin:0;"></span>
+          <div class="rate-row">
+            <input type="number" id="rate2" inputmode="decimal" min="0" step="0.5">
+            <button class="rate-chg" id="rb2"></button>
+          </div>
+          <div style="font-size:12px;color:var(--mut);" id="rn2"></div>
         </div>
-        <div style="font-size:12px;color:var(--mut);" id="rn2"></div>
       </div>
     </div>
     <!-- Backup & Restore accordion -->
@@ -758,13 +774,13 @@ const T = {
     ttl:'🥛 Milk Tracker', L:'Litre', K:'Kg',
     tA:'Total Due (₹)', tQ:'Total Milk Due',
     hDue:'Dues by Month', dEnt:'Add Entry',
-    dueNone:'No dues. Fresh account!',
-    lDate:'Date', lTimes:'Times milk came', lQty:'Quantity each time',
-    cq:'Other qty', cb:'Add', nb:'❌ Milk did not come',
+    dueNone:'All caught up! No pending dues.',
+    lDate:'Date', lTimes:'Deliveries per day', lQty:'Quantity',
+    cq:'Custom qty', cb:'Add', nb:'❌ No Milk Today',
     cur:'Entry: ', curNone:'No entry for this day',
     ovq:'Entry already exists.\nReplace it?',
     fut:'Cannot enter a future date',
-    hPay:'Payment', pay:'💳 Pay Milkman',
+    hPay:'Payment', pay:'💳 Record Payment',
     payInfo:'Due now: ', nopay:'No dues',
     hPH:'Payment History', noPay:'No payments this month',
     hRate:'Milk Rate (₹/unit)', rb:'Save',
@@ -776,8 +792,8 @@ const T = {
     bkXlsx:'Download Excel Backup (.xlsx)',
     bkJson:'Download JSON Backup (.json)',
     rs:'Restore from Backup',
-    bn:'Take regular backups. Clearing browser data may erase entries.',
-    came:'Came', not:'Not came', days:'days', paid:'Paid', pend:'Pending',
+    bn:'Take regular backups. Clearing app data may erase entries.',
+    came:'Delivered', not:'Missed', days:'days', paid:'Paid', pend:'Pending',
     saved:'Saved ✓', del:'Entry deleted',
     delq:'Delete this entry?',
     rset:'Rate updated ✓', paidOk:'Payment recorded ✓',
@@ -791,16 +807,16 @@ const T = {
     rsL:'Select month to reset:',
     rsB:'🗑 Reset This Month', rsQ:'Reset all entries for: ',
     rsOk:'Month reset ✓', rsNo:'No month found',
-    payAmt:'Amount paid (empty = full due)',
+    payAmt:'Amount paid', payAmtNote:'Leave empty to settle full due',
     over:'Amount exceeds total due',
     undo:'↩ Undo Last Payment',
     undoq:'Undo last payment?\nAmount added back to dues:',
     undoOk:'Payment undone ✓',
     noUndo:'Cannot undo this payment',
     wa:'📲 Share on WhatsApp',
-    warn:'⚠️ Browser not saving data! Use link version and take backups.',
-    wTitle:'🥛 Milk Account', wCame:'days milk came', wQty:'Total milk',
-    wTot:'Total ₹', wPaid:'Paid', wDue:'Due', wNot:'Milk did not come:',
+    warn:'⚠️ Storage unavailable! Please take regular backups.',
+    wTitle:'🥛 Milk Account', wCame:'days delivered', wQty:'Total milk',
+    wTot:'Total ₹', wPaid:'Paid', wDue:'Due', wNot:'Missed days:',
     payDel:'Delete Payment', payDelQ:'Delete this payment?\nAmount restored to dues.',
     payDelOk:'Payment deleted ✓',
     masterReset:'🗑 Delete Account (Master Reset)',
@@ -815,13 +831,13 @@ const T = {
     ttl:'🥛 दूध का हिसाब', L:'लीटर', K:'किलो',
     tA:'कुल बकाया रुपये', tQ:'कुल बकाया दूध',
     hDue:'महीने-वार बकाया', dEnt:'एंट्री जोड़ें',
-    dueNone:'कोई बकाया नहीं। नया हिसाब!',
-    lDate:'तारीख', lTimes:'आज कितनी बार आया', lQty:'एक बार में कितना',
-    cq:'अन्य मात्रा', cb:'जोड़ो', nb:'❌ दूध नहीं आया',
+    dueNone:'सब हिसाब साफ है! कोई बकाया नहीं।',
+    lDate:'तारीख', lTimes:'दिन में कितनी बार', lQty:'मात्रा',
+    cq:'अन्य मात्रा', cb:'जोड़ें', nb:'❌ आज दूध नहीं आया',
     cur:'एंट्री: ', curNone:'इस दिन की कोई एंट्री नहीं',
     ovq:'एंट्री पहले से है।\nबदलनी है?',
     fut:'आगे की तारीख की एंट्री नहीं हो सकती',
-    hPay:'पैसे चुकाना', pay:'💳 दूधिए को दो',
+    hPay:'पेमेंट', pay:'💳 पेमेंट दर्ज करें',
     payInfo:'अभी बकाया: ', nopay:'कोई बकाया नहीं',
     hPH:'पेमेंट हिस्ट्री', noPay:'इस महीने कोई पेमेंट नहीं',
     hRate:'दूध का रेट (₹/यूनिट)', rb:'सेव',
@@ -832,8 +848,8 @@ const T = {
     hBak:'बैकअप और रिस्टोर',
     bkXlsx:'एक्सेल बैकअप (.xlsx) डाउनलोड करें',
     bkJson:'JSON बैकअप (.json) डाउनलोड करें',
-    rs:'बैकअप से वापस लाओ',
-    bn:'बैकअप ज़रूर बनाएँ। ब्राउज़र डेटा साफ करने पर हिसाब मिट सकता है।',
+    rs:'बैकअप से रिस्टोर करें',
+    bn:'बैकअप ज़रूर बनाएँ। ऐप डेटा साफ करने पर हिसाब मिट सकता है।',
     came:'आया', not:'नहीं आया', days:'दिन', paid:'चुकाया', pend:'बाकी',
     saved:'सेव हो गया ✓', del:'एंट्री हटा दी',
     delq:'यह एंट्री हटानी है?',
@@ -846,28 +862,28 @@ const T = {
     times:'बार', empty:'अभी कोई एंट्री नहीं',
     rate:'रेट', decl:'सेव नहीं हुआ', yes:'हाँ', cancel:'रद्द करें',
     rsL:'कौन सा महीना रीसेट करें?',
-    rsB:'🗑 इस महीने का डेटा रीसेट करो',
+    rsB:'🗑 इस महीने का डेटा रीसेट करें',
     rsQ:'इस महीने की सारी एंट्री मिटाएँ: ',
     rsOk:'महीना रीसेट हो गया ✓', rsNo:'कोई महीना नहीं मिला',
-    payAmt:'कितने रुपये? (खाली = पूरा बकाया)',
+    payAmt:'चुकाई गई रकम', payAmtNote:'पूरा बकाया चुकाने के लिए खाली छोड़ें',
     over:'बकाया से ज़्यादा रकम नहीं डाल सकते',
-    undo:'↩ आखिरी पेमेंट वापस करो',
-    undoq:'आखिरी पेमेंट वापस करनी है?\nबकाया में जुड़ जाएगी:',
+    undo:'↩ आखिरी पेमेंट वापस लें',
+    undoq:'आखिरी पेमेंट वापस लेनी है?\nबकाया में जुड़ जाएगी:',
     undoOk:'पेमेंट वापस हो गई ✓',
     noUndo:'यह पुरानी पेमेंट है, वापस नहीं हो सकती',
-    wa:'📲 WhatsApp पर भेजो',
-    warn:'⚠️ डेटा सेव नहीं हो पा रहा! बंद होने पर सब चला जाएगा।',
+    wa:'📲 WhatsApp पर भेजें',
+    warn:'⚠️ डेटा सेव नहीं हो पा रहा! कृपया नियमित बैकअप लें।',
     wTitle:'🥛 दूध का हिसाब', wCame:'दिन दूध आया', wQty:'कुल दूध',
     wTot:'कुल रुपये', wPaid:'चुकाया', wDue:'बाकी', wNot:'दूध नहीं आया:',
     payDel:'पेमेंट हटाएँ', payDelQ:'यह पेमेंट हटानी है?\nबकाया में वापस जुड़ जाएगी।',
     payDelOk:'पेमेंट हटा दी ✓',
-    masterReset:'🗑 सारा हिसाब मिटाओ',
+    masterReset:'🗑 सारा हिसाब मिटाएँ',
     masterNote:'मिटाने से पहले बैकअप बना लें।',
     masterQ:'सारा डेटा हमेशा के लिए मिटाएँ?\nवापस नहीं आएगा।',
     masterOk:'सारा डेटा मिट गया ✓',
     set:'सेटिंग्स', hRate_lbl:'दूध का रेट',
     bakHdr:'बैकअप और रिस्टोर', rstHdr:'रीसेट और डिलीट',
-    today:'आज', edit:'बदलो', deleteLbl:'हटाओ',
+    today:'आज', edit:'बदलें', deleteLbl:'हटाएँ',
   }
 };
 
@@ -883,6 +899,7 @@ const KEY = 'doodhHisabV1';
 ══════════════════════════════════════════════ */
 let S = { rate:60, unit:'L', lang:'en', entries:{}, pays:[] };
 let times = 1;
+let customTimesOpen = false;
 let vm    = today().slice(0,7);
 let mem   = null;
 
@@ -1066,9 +1083,12 @@ function refreshLangSeg(){
   updateThumb($('lSeg'),$('lThumb'),on);
 }
 function refreshTimesSeg(){
-  const on=times===1?$('tBtn1'):$('tBtn2');
-  $('tBtn1').classList.toggle('on',times===1);
-  $('tBtn2').classList.toggle('on',times===2);
+  const isCustom=customTimesOpen||(times!==1&&times!==2);
+  const on=isCustom?$('tBtnPlus'):(times===1?$('tBtn1'):$('tBtn2'));
+  $('tBtn1').classList.toggle('on',!isCustom&&times===1);
+  $('tBtn2').classList.toggle('on',!isCustom&&times===2);
+  $('tBtnPlus').classList.toggle('on',isCustom);
+  $('tCustom').hidden=!isCustom;
   updateThumb($('tSeg'),$('tThumb'),on);
 }
 
@@ -1076,8 +1096,28 @@ $('uBtnL').onclick=()=>{ S.unit='L'; save(); render(); };
 $('uBtnK').onclick=()=>{ S.unit='K'; save(); render(); };
 $('lBtnEn').onclick=()=>{ S.lang='en'; save(); render(); };
 $('lBtnHi').onclick=()=>{ S.lang='hi'; save(); render(); };
-$('tBtn1').onclick=()=>{ times=1; refreshTimesSeg(); };
-$('tBtn2').onclick=()=>{ times=2; refreshTimesSeg(); };
+$('tBtn1').onclick=()=>{ customTimesOpen=false; times=1; $('tCustom').value=''; refreshTimesSeg(); };
+$('tBtn2').onclick=()=>{ customTimesOpen=false; times=2; $('tCustom').value=''; refreshTimesSeg(); };
+$('tBtnPlus').onclick=()=>{
+  customTimesOpen=true;
+  if(times<=2) times=3;
+  $('tCustom').value=times;
+  refreshTimesSeg();
+  $('tCustom').focus();
+  $('tCustom').select();
+};
+$('tCustom').oninput=()=>{
+  const v=parseInt($('tCustom').value,10);
+  if(!isNaN(v)&&v>=1) times=Math.min(10,v);
+};
+$('tCustom').onblur=()=>{
+  const v=parseInt($('tCustom').value,10);
+  if(isNaN(v)||v<1){
+    customTimesOpen=false; times=1; $('tCustom').value=''; refreshTimesSeg();
+  }else{
+    times=Math.min(10,v); $('tCustom').value=times;
+  }
+};
 
 /* ══════════════════════════════════════════════
    Pull-to-Refresh
@@ -1121,7 +1161,7 @@ async function sv(came,qty){
   if(old&&!(await ask(t('ovq'),desc(old),true)))return false;
   S.entries[d]={came,qty:came?qty:0,times:came?times:0,
     rate:old?old.rate:S.rate,pa:old?(old.pa||0):0};
-  times=1;save();render();toast(t('saved'));return true;
+  customTimesOpen=false;times=1;$('tCustom').value='';save();render();toast(t('saved'));return true;
 }
 
 /* ══════════════════════════════════════════════
@@ -1167,6 +1207,7 @@ function renderText(){
   $('wa').textContent=t('wa');
   $('payAmtLbl').textContent=t('payAmt');
   $('payAmt').placeholder=t('payAmt');
+  $('payAmtNote').textContent=t('payAmtNote');
   $('rb2').textContent=t('rb');
   $('rn2').textContent=t('rn');
   $('bn').textContent=t('bn');
@@ -1381,7 +1422,7 @@ $('his').onclick = async e => {
     const k = editBtn.dataset.edit;
     const en = S.entries[k];
     $('date').value = k;
-    if(en && en.came){ times = en.times || 1; refreshTimesSeg(); }
+    if(en && en.came){ times = en.times || 1; customTimesOpen = (times !== 1 && times !== 2); $('tCustom').value = customTimesOpen ? times : ''; refreshTimesSeg(); }
     renderDatePreview(); renderMonth();
     setTimeout(()=>$('date').scrollIntoView({behavior:'smooth',block:'center'}),50);
     return;
