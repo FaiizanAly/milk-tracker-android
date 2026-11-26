@@ -2,8 +2,8 @@
 
 A simple, modern, and 100% offline Android app to track daily milk deliveries, quantities, and payment records effortlessly.
 
-[![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.0)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-007AFF?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.0)
+[![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.2)
+[![Release](https://img.shields.io/badge/Release-v1.0.2-007AFF?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.2)
 [![Offline First](https://img.shields.io/badge/Offline%20First-100%25-34C759?style=for-the-badge&logo=offline&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-FF9500?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/FaiizanAly/milk-tracker-android)
 
@@ -29,9 +29,12 @@ Get the latest version directly on your Android phone:
 ## ✨ Why You'll Love It
 
 - 📝 **Easy Daily Tracking:** Add morning and evening milk entries with a single tap. Review past entries anytime with direct **Edit (✏️)** and **Delete (🗑️)** buttons on each row.
+- ➕ **Custom Daily Delivery Count (`+`):** Quickly pick `1` or `2` deliveries per day, or tap `+` to enter a custom delivery count (`3+`).
 - ⚡ **Smart Rate Updates:** Update your milk price per liter or kilogram in Settings; the app recalculates everything and returns you straight to the home screen automatically.
 - 💾 **One-Tap Backup & Restore:** Export clean **Excel (`.xlsx`)** spreadsheets and lightweight **JSON (`.json`)** backups directly into your phone's **Downloads** folder. Restore your data anytime with one tap.
 - 🔒 **100% Offline & Private:** Operates entirely without an internet connection. Every record stays safely on your own device—nothing is ever uploaded to any cloud server or shared with third parties.
+- 📱 **Fits Every Android Screen:** Locked WebView font scaling (`setTextZoom(100)`), smooth vertical scrolling, and responsive narrow-screen layout so nothing zooms or clips on any phone size.
+- 💬 **Clean, Natural Labels:** Polished bilingual (English & Hindi) labels such as `"No Milk Today"` and refined payment/rate controls.
 - 🎨 **Clean Liquid-Glass Design:** Crafted with an Apple iOS-inspired Light Mode aesthetic, smooth spring animations, custom app icon, and full bilingual support (English & Hindi).
 
 ---
@@ -39,7 +42,7 @@ Get the latest version directly on your Android phone:
 ## 📱 Quick Guide
 
 1. **Log Daily Milk:**  
-   Select the date, pick morning and/or evening milk quantity, and tap **Save Entry**. Your monthly total, overall cost, and dues update instantly.
+   Select the date, choose **1**, **2**, or tap **+** for custom deliveries per day, and pick the milk quantity (or tap **No Milk Today**). Your monthly total, overall cost, and dues update instantly.
 2. **Set Your Milk Rate:**  
    Tap **Settings (⚙️)** in the top right, enter your rate per liter/kg, and tap **Save Rate**. The app saves your price and automatically brings you back to the home screen.
 3. **Record Payments:**  
