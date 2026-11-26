@@ -18,7 +18,7 @@ Get the latest version directly on your Android phone:
 
 ### Quick Install Steps:
 
-1. 🌐 Open the **[Milk Tracker v1.0.2 Release Page]([https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.0](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.2))**.
+1. 🌐 Open the **[Milk Tracker v1.0.2 Release Page](https://github.com/FaiizanAly/milk-tracker-android/releases/tag/v1.0.2)**.
 2. 📦 Scroll down to the **Assets** section and tap **`Milk Tracker.apk`** to download the app.
 3. 📂 Open the downloaded **`Milk Tracker.apk`** file from your phone's notification bar or `Downloads` folder.
 4. ⚙️ If Android asks for permission to install apps from unknown sources, tap **Settings**, allow it once, and tap **Install**.
